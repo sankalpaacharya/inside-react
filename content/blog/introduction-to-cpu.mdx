@@ -1,0 +1,84 @@
+---
+title: "Question is not HOW it's WHY!"
+description: "Understanding the brain of your computer - how CPUs work and why they matter"
+date: "2026-01-03"
+topic: "Engineering"
+---
+
+> This blog is purely based off my research and learning, if you find anything wrong feel free to raise and issue
+>
+
+Back in old days, Facebook was getting tractions, hitting thousands and thousands of users, facebook was
+popular and a cool trend among people
+![facebook](https://observer.com/wp-content/uploads/sites/2/2024/02/Screenshot-2024-02-02-at-10.36.06-AM.png)
+
+Facebook wasn't a online shopping app where you would just buy items and leave the site, it was a social 
+media platform where lots of people are constantly engaging, chatting viewing profiles, messaging eachother.
+
+
+During the web1.0 pages where mostly static and it was just like a internet just filled with PDF's 
+it was dull and no interaction, Netspace wanted a dynamic behaviour in the browser. everytime we used 
+to click buttons or do any interaction that would cause the whole page reload.
+
+Netspace a company had a browser called netspace navigator a dominant early web browser in the mid-1990s, known for popularizing the graphical web and introducing features like JavaScript and cookies
+they needed a dynamic behaviour in the browser
+netspace navigator 2 was shipped with a javascript, that's how javascript was born
+
+![](https://static.ispmanager.com/site/2024/08/01/6b668fa23260bf771d4a6a24263cc0223cb3fd24.webp)
+
+Soon later internet explorer added a support but it was a called a JScript, it was little different implementation
+than the netspace. The problem was there was no standarization, Developer would need to write a 
+code for one browser and again to make interactive on other they would need to write different javascript.
+
+## ECMA
+
+In 1996 standarization begins, ECMA a non profitable organization made a ECMAScript spec, specsification 
+had listed how the javascript should behave not how it should built, so that's the reason we see 
+different browser engine nowdays they all follow the ecma spec
+
+In the spec, the **rule for `map`** is described very precisely, step by step. Here’s a simplified version of what it says
+
+> 1. Let `O` be the object the method is called on.
+>     
+> 2. Let `len` be the length of `O`.
+>     
+> 3. Let `A` be a new array of length `len`.
+>     
+> 4. For each index `k` from 0 to `len - 1`:  
+>       a. If `O` has a property at `k`, get its value.  
+>       b. Call the callback function with the value, index `k`, and `O`.  
+>       c. Set `A[k]` to the return value of the callback.
+>     
+> 5. Return `A`.
+
+It doesn't say how array needs to store variable into an memory, or how to make running loop fast so different company are free 
+to create their own permoative engine for their browser, v8 for chrome, spider monkey for firefox
+etc so whatever javascript you write will output same in different engine as they follow ecma spec.
+
+during the 1995 javascript came into the picture to make web interactive
+things weren't that easy, javascript was elolving 
+
+
+People were constantly trying to make writing javascript easy, there were we would see the very popular 
+library like JQuery.
+
+frontend wasn't easy like it is nowdays things where different, writing javascript was horrible, maintaing 
+code was difficult
+
+```html
+here the code
+
+<script></script>
+
+```
+
+Before we understand React Internals, let's first get the glimpse of the history of web. Let's not ask question
+of *HOW* let's ask *WHY* 
+
+Why the heck we even need React.JS? 
+
+## World Wide Web
+
+The birth of web was during an
+
+

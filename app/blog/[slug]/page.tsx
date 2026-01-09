@@ -83,7 +83,7 @@ export default async function BlogPost({
         >
           <img
             src={post.frontmatter.image || "/placeholder.svg"}
-            alt={post.frontmatter.title}
+            alt={post.frontmatter.title + " image"}
             className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
           />
         </div>
