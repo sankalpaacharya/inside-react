@@ -35,7 +35,7 @@ export default async function BlogPost({
   }
 
   return (
-    <main className="max-w-3xl mx-auto px-6 py-12">
+    <main className="max-w-5xl mx-auto px-6 py-12">
       {/* Back Link */}
       <Link
         href="/"
@@ -47,51 +47,46 @@ export default async function BlogPost({
 
       {/* Post Header */}
       <article>
-        <h1
-          className="text-4xl lg:text-5xl font-bold mb-4 leading-tight animate-slide-up opacity-0"
-          style={{ animationDelay: "100ms", animationFillMode: "forwards" }}
-        >
-          {post.frontmatter.title}
-        </h1>
+        <div className="max-w-2xl">
+          <h1
+            className="text-3xl lg:text-4xl font-bold mb-4 leading-tight animate-slide-up opacity-0"
+            style={{ animationDelay: "100ms", animationFillMode: "forwards" }}
+          >
+            {post.frontmatter.title}
+          </h1>
 
-        <p
-          className="text-xl text-muted-foreground mb-8 leading-relaxed animate-slide-up opacity-0"
-          style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
-        >
-          {post.frontmatter.description}
-        </p>
+          <p
+            className="text-lg text-muted-foreground mb-8 leading-relaxed animate-slide-up opacity-0"
+            style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
+          >
+            {post.frontmatter.description}
+          </p>
 
-        {/* Post Meta */}
-        <div
-          className="flex flex-wrap gap-6 pb-8 border-b border-border mb-12 animate-slide-up opacity-0"
-          style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
-        >
-          <div>
-            <p className="text-muted-foreground text-sm">Published</p>
-            <p className="font-medium">{post.frontmatter.date}</p>
-          </div>
-          <div>
-            <p className="text-muted-foreground text-sm">Topic</p>
-            <p className="font-medium">{post.frontmatter.topic}</p>
+          {/* Post Meta */}
+          <div
+            className="flex flex-wrap gap-6 pb-8 border-b border-border mb-12 animate-slide-up opacity-0"
+            style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
+          >
+            <div>
+              <p className="text-muted-foreground text-sm">Published</p>
+              <p className="font-medium">{post.frontmatter.date}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground text-sm">Topic</p>
+              <p className="font-medium">{post.frontmatter.topic}</p>
+            </div>
           </div>
         </div>
 
-        {/* Featured Image */}
+        {/* MDX Content - full width for scrollycoding */}
         <div
-          className="mb-12 rounded-xl overflow-hidden animate-scale-in opacity-0"
+          className="prose prose-invert prose-lg max-w-none animate-fade-in opacity-0 
+            prose-headings:font-medium prose-headings:tracking-tight
+            prose-p:text-muted-foreground prose-p:leading-relaxed
+            prose-strong:text-foreground prose-strong:font-medium
+            prose-code:text-sm prose-code:bg-zinc-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+            prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
           style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
-        >
-          <img
-            src={post.frontmatter.image || "/placeholder.svg"}
-            alt={post.frontmatter.title + " image"}
-            className="w-full h-auto object-cover transition-transform duration-500 hover:scale-105"
-          />
-        </div>
-
-        {/* MDX Content */}
-        <div
-          className="prose prose-invert prose-lg max-w-none animate-fade-in opacity-0"
-          style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
         >
           {post.content}
         </div>
@@ -99,8 +94,8 @@ export default async function BlogPost({
 
       {/* Footer CTA */}
       <div
-        className="border-t border-border pt-12 mt-16 text-center animate-fade-in opacity-0"
-        style={{ animationDelay: "600ms", animationFillMode: "forwards" }}
+        className="border-t border-border pt-12 mt-16 text-center animate-fade-in opacity-0 max-w-2xl mx-auto"
+        style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
       >
         <p className="text-muted-foreground mb-6">
           Enjoyed this post? Subscribe to get new articles delivered to your

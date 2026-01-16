@@ -4,6 +4,15 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/* Code Hike custom styles */
+.ch-code-scroll-parent {
+  overflow-x: auto;
+}
+
+.ch-code-scroll-child {
+  min-width: fit-content;
+}
+
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.1450 0 0);
