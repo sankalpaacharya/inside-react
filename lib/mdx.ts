@@ -87,7 +87,19 @@ export async function getPostBySlug(slug: string): Promise<PostWithContent | nul
     return null;
   }
 
-  const source = fs.readFileSync(filePath, "utf-8");
+  let source = fs.readFileSync(filePath, "utf-8");
+  
+  // Auto-wrap content in Scrollycoding if it contains !!steps blocks
+  // This allows MDX files to just use !!steps syntax without explicit wrapper
+  if (source.includes('## !!steps') && !source.includes('<Scrollycoding>')) {
+    // Split frontmatter and content
+    const parts = source.split('---');
+    if (parts.length >= 3) {
+      const frontmatter = parts[1];
+      const content = parts.slice(2).join('---');
+      source = `---${frontmatter}---\n\n<Scrollycoding>\n${content}\n</Scrollycoding>`;
+    }
+  }
 
   const { content, frontmatter } = await compileMDX<PostFrontmatter>({
     source,

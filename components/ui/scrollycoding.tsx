@@ -8,7 +8,7 @@ import {
   InnerToken,
   Pre,
 } from "codehike/code";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { SmoothPre } from "./smooth-pre";
 
 // Token transitions handler for smooth code animations
@@ -34,118 +34,116 @@ type ScrollycodingProps = {
 export function Scrollycoding(props: ScrollycodingProps) {
   const { steps } = parseProps(props, Schema);
   const [activeStep, setActiveStep] = useState(0);
-  const [mounted, setMounted] = useState(false);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  useEffect(() => {
-    setMounted(true);
+  // Find which step is most prominent in the viewport
+  const updateActiveStep = useCallback(() => {
+    const viewportHeight = window.innerHeight;
+    const targetY = viewportHeight * 0.3; // Focus point at 30% from top
+
+    let closestIndex = 0;
+    let closestDistance = Infinity;
+
+    stepRefs.current.forEach((ref, index) => {
+      if (!ref) return;
+
+      const rect = ref.getBoundingClientRect();
+      const elementCenter = rect.top + rect.height / 2;
+      const distance = Math.abs(elementCenter - targetY);
+
+      // Only consider if element is at least partially visible
+      if (rect.bottom > 0 && rect.top < viewportHeight) {
+        if (distance < closestDistance) {
+          closestDistance = distance;
+          closestIndex = index;
+        }
+      }
+    });
+
+    setActiveStep(closestIndex);
   }, []);
 
   useEffect(() => {
-    if (!mounted) return;
+    // Initial update
+    updateActiveStep();
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const index = stepRefs.current.indexOf(
-              entry.target as HTMLDivElement
-            );
-            if (index !== -1) {
-              setActiveStep(index);
-            }
-          }
-        });
-      },
-      {
-        root: null,
-        rootMargin: "-45% 0px -45% 0px",
-        threshold: 0,
-      }
-    );
+    // Update on scroll
+    const handleScroll = () => {
+      requestAnimationFrame(updateActiveStep);
+    };
 
-    stepRefs.current.forEach((ref) => {
-      if (ref) observer.observe(ref);
-    });
-
-    return () => observer.disconnect();
-  }, [mounted, steps.length]);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [updateActiveStep]);
 
   const activeCode = steps[activeStep]?.code;
 
   return (
-    <>
-      {/* Full-width scrollycoding - breaks out of container */}
-      <div className="scrollycoding relative -mx-6 lg:-mx-[calc((100vw-64rem)/2+1.5rem)] lg:w-screen">
-        <div className="flex">
-          {/* Left: Text content - 50% width */}
-          <div className="w-full lg:w-1/2 px-6 lg:pl-[max(1.5rem,calc((100vw-64rem)/2+1.5rem))] lg:pr-12">
-            <div className="space-y-[60vh] py-[35vh]">
-              {steps.map((step, index) => (
-                <div
-                  key={index}
-                  ref={(el) => {
-                    stepRefs.current[index] = el;
-                  }}
-                  className="transition-all duration-700 ease-out"
-                  style={{
-                    opacity: activeStep === index ? 1 : 0.15,
-                    transform:
-                      activeStep === index ? "none" : "translateY(4px)",
-                  }}
-                >
-                  <h3 className="text-lg font-medium text-foreground mb-4 tracking-tight">
-                    {step.title}
-                  </h3>
-                  <div className="text-[15px] leading-[1.8] text-zinc-400 max-w-md [&_strong]:text-foreground [&_code]:text-[13px] [&_code]:bg-zinc-800/60 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded [&_code]:text-zinc-300">
-                    {step.children}
-                  </div>
-
-                  {/* Mobile: Show code inline */}
-                  <div className="lg:hidden mt-8">
-                    {step.code && <CodePanel code={step.code} />}
-                  </div>
+    <div className="scrollycoding w-full">
+      <div className="flex flex-col lg:flex-row">
+        {/* Left: Text content */}
+        <div className="w-full lg:w-1/2 px-6 lg:pl-[max(24px,calc((100vw-1200px)/2))] lg:pr-16">
+          <div className="max-w-md ml-auto space-y-20 pt-16 pb-32">
+            {steps.map((step, index) => (
+              <div
+                key={index}
+                ref={(el) => {
+                  stepRefs.current[index] = el;
+                }}
+                className="transition-opacity duration-300 ease-out"
+                style={{
+                  opacity: activeStep === index ? 1 : 0.35,
+                }}
+              >
+                <h3 className="text-base font-medium text-foreground mb-3">
+                  {step.title}
+                </h3>
+                <div className="text-sm leading-[1.75] text-muted-foreground [&_strong]:text-foreground [&_code]:text-xs [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
+                  {step.children}
                 </div>
-              ))}
-            </div>
-          </div>
 
-          {/* Right: Sticky code panel - 50% width */}
-          <div className="hidden lg:block lg:w-1/2 relative">
-            <div className="sticky top-0 h-screen flex items-center pr-6 lg:pr-[max(1.5rem,calc((100vw-64rem)/2+1.5rem))]">
-              <div className="w-full h-[75vh]">
-                {activeCode && <CodePanel code={activeCode} />}
+                {/* Mobile: Show code inline */}
+                <div className="lg:hidden mt-6">
+                  {step.code && <CodeDisplay code={step.code} />}
+                </div>
               </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right: Sticky code */}
+        <div className="hidden lg:block lg:w-1/2">
+          <div className="sticky top-0 pt-16 px-6 lg:pr-[max(24px,calc((100vw-1200px)/2))] lg:pl-8">
+            <div className="w-full">
+              {activeCode && <CodeDisplay code={activeCode} />}
             </div>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
-function CodePanel({ code }: { code: HighlightedCode }) {
+// Clean syntax highlighted code - no box/container
+function CodeDisplay({ code }: { code: HighlightedCode }) {
   return (
-    <div className="h-full flex flex-col rounded-lg overflow-hidden bg-[#0d1117] border border-zinc-800/40 shadow-2xl shadow-black/30">
-      {/* Tab header - like fant.io */}
-      <div className="flex items-center border-b border-zinc-800/40 bg-[#161b22] shrink-0">
-        <button className="px-4 py-2.5 text-xs font-medium text-zinc-200 border-b-2 border-cyan-500 bg-[#0d1117]">
-          Code
-        </button>
-      </div>
-
-      {/* Code content with token transitions */}
-      <div className="flex-1 overflow-auto">
-        <Pre
-          code={code}
-          handlers={[tokenTransitions]}
-          className="p-5 text-[13px] leading-[1.75] h-full font-mono"
-          style={{
-            ...code.style,
-            background: "transparent",
-          }}
-        />
-      </div>
+    <div className="font-mono">
+      {/* Filename - subtle */}
+      {code.meta && (
+        <div className="text-xs text-muted-foreground mb-3 opacity-60">
+          {code.meta}
+        </div>
+      )}
+      {/* Just the code with syntax highlighting */}
+      <Pre
+        code={code}
+        handlers={[tokenTransitions]}
+        className="text-[13px] leading-[1.8]"
+        style={{
+          ...code.style,
+          background: "transparent",
+        }}
+      />
     </div>
   );
 }

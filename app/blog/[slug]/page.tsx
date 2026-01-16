@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPostBySlug, getAllPostSlugs } from "@/lib/mdx";
 
@@ -35,76 +34,18 @@ export default async function BlogPost({
   }
 
   return (
-    <main className="max-w-5xl mx-auto px-6 py-12">
-      {/* Back Link */}
-      <Link
-        href="/"
-        className="inline-flex items-center gap-2 text-muted-foreground hover:text-foreground transition-all duration-300 mb-8 hover:-translate-x-1 animate-fade-in opacity-0"
-        style={{ animationDelay: "0ms", animationFillMode: "forwards" }}
+    <main className="min-h-screen">
+      {/* MDX Content - full width, no header */}
+      <article
+        className="prose prose-invert max-w-none
+          prose-headings:font-medium prose-headings:tracking-tight
+          prose-p:text-muted-foreground prose-p:leading-relaxed
+          prose-strong:text-foreground prose-strong:font-medium
+          prose-code:text-sm prose-code:bg-muted prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
+          prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
       >
-        <span>←</span> All posts
-      </Link>
-
-      {/* Post Header */}
-      <article>
-        <div className="max-w-2xl">
-          <h1
-            className="text-3xl lg:text-4xl font-bold mb-4 leading-tight animate-slide-up opacity-0"
-            style={{ animationDelay: "100ms", animationFillMode: "forwards" }}
-          >
-            {post.frontmatter.title}
-          </h1>
-
-          <p
-            className="text-lg text-muted-foreground mb-8 leading-relaxed animate-slide-up opacity-0"
-            style={{ animationDelay: "200ms", animationFillMode: "forwards" }}
-          >
-            {post.frontmatter.description}
-          </p>
-
-          {/* Post Meta */}
-          <div
-            className="flex flex-wrap gap-6 pb-8 border-b border-border mb-12 animate-slide-up opacity-0"
-            style={{ animationDelay: "300ms", animationFillMode: "forwards" }}
-          >
-            <div>
-              <p className="text-muted-foreground text-sm">Published</p>
-              <p className="font-medium">{post.frontmatter.date}</p>
-            </div>
-            <div>
-              <p className="text-muted-foreground text-sm">Topic</p>
-              <p className="font-medium">{post.frontmatter.topic}</p>
-            </div>
-          </div>
-        </div>
-
-        {/* MDX Content - full width for scrollycoding */}
-        <div
-          className="prose prose-invert prose-lg max-w-none animate-fade-in opacity-0 
-            prose-headings:font-medium prose-headings:tracking-tight
-            prose-p:text-muted-foreground prose-p:leading-relaxed
-            prose-strong:text-foreground prose-strong:font-medium
-            prose-code:text-sm prose-code:bg-zinc-800/50 prose-code:px-1.5 prose-code:py-0.5 prose-code:rounded prose-code:before:content-none prose-code:after:content-none
-            prose-a:text-primary prose-a:no-underline hover:prose-a:underline"
-          style={{ animationDelay: "400ms", animationFillMode: "forwards" }}
-        >
-          {post.content}
-        </div>
+        {post.content}
       </article>
-
-      {/* Footer CTA */}
-      <div
-        className="border-t border-border pt-12 mt-16 text-center animate-fade-in opacity-0 max-w-2xl mx-auto"
-        style={{ animationDelay: "500ms", animationFillMode: "forwards" }}
-      >
-        <p className="text-muted-foreground mb-6">
-          Enjoyed this post? Subscribe to get new articles delivered to your
-          inbox.
-        </p>
-        <button className="px-6 py-2.5 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-300 hover:scale-105">
-          Subscribe
-        </button>
-      </div>
     </main>
   );
 }
