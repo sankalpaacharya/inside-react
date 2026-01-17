@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import React from "react";
 import { compileMDX } from "next-mdx-remote/rsc";
 import { remarkCodeHike, recmaCodeHike, type CodeHikeConfig } from "codehike/mdx";
 import { MockTweet } from "@/components/ui/mock-tweet";
@@ -7,6 +8,8 @@ import { TweetGroup } from "@/components/ui/tweet-group";
 import { CodeSandbox } from "@/components/ui/codesandbox";
 import { Code } from "@/components/ui/code";
 import { Scrollycoding } from "@/components/ui/scrollycoding";
+import { HugeiconsIcon } from "@hugeicons/react";
+import { UserGroupIcon, CheckmarkBadge01Icon, NoteIcon } from "@hugeicons/core-free-icons";
 
 // Code Hike configuration
 const chConfig: CodeHikeConfig = {
@@ -16,12 +19,20 @@ const chConfig: CodeHikeConfig = {
   },
 };
 
+const UserGroup = (props: any) => React.createElement(HugeiconsIcon, { icon: UserGroupIcon, ...props });
+const CheckmarkBadge = (props: any) => React.createElement(HugeiconsIcon, { icon: CheckmarkBadge01Icon, ...props });
+const Note = (props: any) => React.createElement(HugeiconsIcon, { icon: NoteIcon, ...props });
+
 const mdxComponents = {
   MockTweet,
   TweetGroup,
   CodeSandbox,
   Code,
   Scrollycoding,
+  HugeiconsIcon,
+  UserGroup,
+  CheckmarkBadge,
+  Note,
 };
 
 const CONTENT_DIR = path.join(process.cwd(), "content/blog");

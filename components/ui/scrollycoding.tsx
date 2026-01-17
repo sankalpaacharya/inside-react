@@ -12,6 +12,18 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { SmoothPre } from "./smooth-pre";
+import { HugeiconsIcon } from "@hugeicons/react";
+import {
+  UserGroupIcon,
+  CheckmarkBadge01Icon,
+  NoteIcon,
+} from "@hugeicons/core-free-icons";
+
+const ICONS: Record<string, any> = {
+  UserGroup: UserGroupIcon,
+  CheckmarkBadge: CheckmarkBadge01Icon,
+  Note: NoteIcon,
+};
 
 const tokenTransitions: AnnotationHandler = {
   name: "token-transitions",
@@ -103,7 +115,20 @@ export function Scrollycoding(props: ScrollycodingProps) {
                       : "text-muted-foreground"
                   }`}
                 >
-                  {step.title}
+                  {(() => {
+                    const rawTitle = step.title || "";
+                    const [iconName, title] = rawTitle.includes("|")
+                      ? rawTitle.split("|")
+                      : [null, rawTitle];
+                    const Icon = iconName ? ICONS[iconName] : null;
+
+                    return (
+                      <div className="flex items-center gap-2">
+                        {Icon && <HugeiconsIcon icon={Icon} size={20} />}
+                        <span>{title}</span>
+                      </div>
+                    );
+                  })()}
                 </h3>
                 <div className="text-sm leading-[1.75] text-muted-foreground [&_strong]:text-foreground [&_code]:text-xs [&_code]:bg-muted [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:rounded">
                   {step.children}
