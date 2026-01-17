@@ -71,7 +71,7 @@ export function Header() {
             Contact
           </a>
           <button className="px-4 py-1.5 rounded-lg bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm transition-colors flex items-center gap-2">
-            Subscribe
+            Hire me
             <span>→</span>
           </button>
         </nav>
