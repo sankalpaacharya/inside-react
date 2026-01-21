@@ -1,97 +1,75 @@
 ---
-title: "Mental Model- React as a UI Runtime"
-description: "Correct Mental Model for the react"
+title: "Running React on different Platforms"
+description: "The correct mental model for understanding React across platforms"
 date: "2026-02-03"
 topic: "React"
 ---
 
-A lot of confusion of mine got clear when i got the correct mental model for the react, it became much more eaiser for me to understand other concept about react as well and i will share same what i learned 
+A lot of my confusion cleared up when I developed the correct mental model for React. It became much easier to understand other concepts, and I want to share what I learned.
 
-{/* <img src="/react/confused.svg" alt="Confused face" width="300" height="100" style={{ display: 'block', margin: '2rem auto' }} /> */}
+We all know React is a UI library, but let's step back and think—what exactly *is* UI?
 
+You might say it's the visual surface we interact with: buttons, links, colors, images, layouts, icons, and more.
 
 # What is UI?
 
-We all know react is a UI library but let’s snap back and think what exactly is the UI, 
-you might say its is visual surface where we interact, UI consists of buttons, links, colors, image, layouts, icons etc 
+<img src="/react/apple.png" alt="Apple UI example" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
+For the **web**, we use HTML tags like `<div>`, `<button>`, `<a>`, `<img>` to create UI elements
 
-<img src="/react/youtube.svg" alt="Confused face" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
-
-for web we have different html tags like button div, a, img etc to create these UI elements and for mobile apps we have native components like View Pressable, scrollview etc for those who are not familiar with mobile development don’t worry they are just like html tags but for mobile app.
-
-no matter if it’s a mobile UI or the web UI they share one common thing that is hierarchy, they both same some tree like structure don’t they? 
-
-```json
-{
-  author: {
-    avatar: 'https://example.com/dril.jpg',
-    displayName: 'wint',
-    handle: 'dril'
-  },
-  text: 'no',
-  createdAt: '2008-09-15T17:25:00.000Z',
-  replyCount: 819,
-  repostCount: 56137,
-  likeCount: 125381
-}
+```html
+<div class="card">
+  <img src="avatar.png" alt="User" />
+  <button>Follow</button>
+</div>
 ```
 
-in web you see a button, img tag is inside div tag and div tag is inside a body tag.
+For **mobile apps**, we have native components like `View`, `Pressable`, and `Text`
 
-same for mobile as well we have View component and inside you create pressable component etc
+```tsx
+<View style={styles.card}>
+  <Image source={avatar} />
+  <Pressable onPress={handleFollow}>
+    <Text>Follow</Text>
+  </Pressable>
+</View>
+```
 
-the way UI are structure is somehow like a tree like structures no matter which platform we are
+For those unfamiliar with mobile development—don't worry! These are just like HTML tags, but for mobile apps.
 
-okay keeping this in mind let’s move forward 
+No matter if it's mobile or web, they share one common thing: **hierarchy**. Both have a tree-like structure, don't they?
 
-# React for different Platform
+# React for Different Platforms
 
-React is a pretty dominant frontend framework, it's everywhere, we have very popular library
-based on react like nextjs(great for server side rendering), react-native which is used for 
-building mobile applications or maybe react-three-js for building 3d apps or maybe ink for 
-building terminal applications
+React is a dominant frontend framework—it's everywhere! We have popular libraries built on React:
 
-maybe you have used these framework or maybe you have just heard of them, but i'm sure 
-you have used react for building web applications, if not why would you be reading this blog, right?
+- **Next.js** — for server-side rendering
+- **React Native** — for mobile applications  
+- **React Three Fiber** — for 3D applications
+- **Ink** — for terminal applications
 
-as i just mentioned, react-native for building mobile applications and ink for building terminal 
-apps, from there we can understand one thing that is react is not just for building web applications, if
-it was only for building an web apps then how people used it for building mobile apps or terminal apps as well. 
+Maybe you've used some of these, or just heard of them. But I'm sure you've used React for building web applications—otherwise, why would you be reading this?
 
-so from here, let's think react as a UI runtime, it's not just for building web applications, it's for building any kind of UI applications
-Dan Abramov has a great article on this "React is a UI runtime"
+Since React Native builds mobile apps and Ink builds terminal apps, we can understand something important: **React is not just for web applications**. If it was only for web, how could people use it for mobile and terminal apps too?
 
-<img src="/react/ui-runtime.svg" alt="Confused face" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+So let's think of React as a **UI Runtime**—it's not just for building web apps, it's for building *any* kind of UI.
 
-I hope you have heard of react-native, react-three-js library somewhere, what they all do? 
+Dan Abramov has a great article on this: "React as a UI Runtime"
 
-we use react-native to build mobile apps and react-three-js to build 3d apps, right? 
+<img src="/react/apple.png" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-are they all created by the react native teams? if not why do we even bother to name so
+# The Two Parts of React
 
-i would like to break react in two parts one is reconciler and another one is host instance
+I like to break React into two parts:
 
-even if you check the react source code you will see two different package 
-	⁃	react-reconciler 
-	⁃	react-dom 
+1. **Reconciler** — the diffing algorithm
+2. **Host Instance** — the platform-specific renderer
 
-these two packages are the one you use in web building websites i will get into why i’m diving the react into two parts
+If you check the React source code, you'll see two key packages:
 
- insert image here from the github repo
+- `react-reconciler`
+- `react-dom`
 
-this single distinction alone will help us understand later concepts(other blog in series)
+This distinction helps us understand *why* React works on different platforms. The reconciler is the brain that figures out what changed, while the host instance (like `react-dom` for web or `react-native` for mobile) handles the actual rendering.
 
-this distinction will help us understand how react works
-
-react basically works on two phase one is render phase and one is commit phase(in later blog on this series) 
-
-make a illustration here for better understanding 
-
-reconciliation is basically your render phase and react-dom is the commit phase 
-
-reconciliation is nothing but it’s just a diffing algorithm which checks two dom tree and finds the difference and difference are added are commit into the web
-
-we will discuss about these in later blog post but for now keep in mind it works in two phase
-
-let’s get back to our UI philosophy
+We'll explore this more in the next post!

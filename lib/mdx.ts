@@ -11,13 +11,13 @@ import { Scrollycoding } from "@/components/ui/scrollycoding";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserGroupIcon, CheckmarkBadge01Icon, NoteIcon } from "@hugeicons/core-free-icons";
 
-import catppuccinMocha from "./catppuccin-mocha.json";
+import premiumTheme from "./premium-theme.json";
 
 // Code Hike configuration
 const chConfig: CodeHikeConfig = {
   components: { code: "Code" },
   syntaxHighlighting: {
-    theme: catppuccinMocha as any,
+    theme: premiumTheme as any,
   },
 };
 

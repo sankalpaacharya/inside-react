@@ -201,7 +201,7 @@ export function Scrollycoding(props: ScrollycodingProps) {
 
 function CodeDisplay({ code }: { code: HighlightedCode }) {
   return (
-    <CodeWindow className="my-0 shadow-2xl bg-[#111111] border-zinc-800/50">
+    <CodeWindow className="my-0 shadow-2xl bg-[#1a1625] border-[#2d2640]/80">
       <div className="p-4">
         <Pre
           code={code}

@@ -69,20 +69,21 @@
 }
 
 .dark {
-  --background: oklch(0.2013 0.0016 17.2890);
-  --foreground: oklch(0.9850 0 0);
-  --card: oklch(0.2050 0 0);
-  --card-foreground: oklch(0.9850 0 0);
-  --popover: oklch(0.2690 0 0);
-  --popover-foreground: oklch(0.9850 0 0);
-  --primary:  #ff5112;
-  --primary-foreground: oklch(0.2046 0 0);
-  --secondary: oklch(0.2690 0 0);
-  --secondary-foreground: oklch(0.9850 0 0);
-  --muted: oklch(0.2690 0 0);
-  --muted-foreground: oklch(0.7080 0 0);
-  --accent: oklch(0.3710 0 0);
-  --accent-foreground: oklch(0.9850 0 0);
+  /* Premium reading experience - inspired by overreacted.io */
+  --background: oklch(0.145 0.006 285); /* Deeper dark with subtle purple undertone */
+  --foreground: oklch(0.92 0.015 75); /* Warm cream white for comfortable reading */
+  --card: oklch(0.18 0.006 285);
+  --card-foreground: oklch(0.92 0.015 75);
+  --popover: oklch(0.20 0.006 285);
+  --popover-foreground: oklch(0.92 0.015 75);
+  --primary: oklch(0.72 0.14 30); /* Softer warm coral - refined orange */
+  --primary-foreground: oklch(0.15 0 0);
+  --secondary: oklch(0.22 0.006 285);
+  --secondary-foreground: oklch(0.92 0.015 75);
+  --muted: oklch(0.22 0.006 285);
+  --muted-foreground: oklch(0.62 0.02 60); /* Warmer muted for better readability */
+  --accent: oklch(0.30 0.008 285);
+  --accent-foreground: oklch(0.92 0.015 75);
   --destructive: oklch(0.7040 0.1910 22.2160);
   --destructive-foreground: oklch(0.9850 0 0);
   --border: oklch(0.2750 0 0);

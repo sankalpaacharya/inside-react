@@ -6,10 +6,10 @@ import { CodeWindow } from "./code-window";
 export function Code({ codeblock }: { codeblock: HighlightedCode }) {
   return (
     <CodeWindow>
-      <div className="overflow-x-auto p-4">
+      <div className="overflow-x-auto px-4 py-3">
         <Pre
           code={codeblock}
-          className="text-sm"
+          className="text-[14px] font-mono leading-[1.7]"
           style={{
             ...codeblock.style,
             background: "transparent",

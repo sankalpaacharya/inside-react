@@ -15,7 +15,7 @@ export function CodeWindow({ children, className }: CodeWindowProps) {
   return (
     <div
       className={cn(
-        "relative rounded-lg border border-zinc-700/50 bg-zinc-900 overflow-hidden my-6",
+        "relative rounded-lg bg-transparent border border-[#3d3a50] overflow-hidden my-6",
         className,
       )}
     >

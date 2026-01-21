@@ -1,0 +1,137 @@
+{
+  "name": "Premium Blog Theme",
+  "type": "dark",
+  "colors": {
+    "editor.background": "transparent",
+    "editor.foreground": "#e2e0e7"
+  },
+  "tokenColors": [
+    {
+      "name": "Base text",
+      "scope": ["text", "source"],
+      "settings": {
+        "foreground": "#e2e0e7"
+      }
+    },
+    {
+      "name": "Comments",
+      "scope": ["comment", "punctuation.definition.comment"],
+      "settings": {
+        "foreground": "#6b6878",
+        "fontStyle": "italic"
+      }
+    },
+    {
+      "name": "Strings",
+      "scope": ["string", "punctuation.definition.string"],
+      "settings": {
+        "foreground": "#f0c674"
+      }
+    },
+    {
+      "name": "Numbers",
+      "scope": ["constant.numeric"],
+      "settings": {
+        "foreground": "#de935f"
+      }
+    },
+    {
+      "name": "Booleans & Constants",
+      "scope": ["constant.language", "variable.other.constant", "entity.name.constant"],
+      "settings": {
+        "foreground": "#de935f"
+      }
+    },
+    {
+      "name": "Keywords",
+      "scope": ["keyword", "storage.type", "storage.modifier"],
+      "settings": {
+        "foreground": "#c9a0dc"
+      }
+    },
+    {
+      "name": "Functions",
+      "scope": ["entity.name.function", "support.function", "variable.function"],
+      "settings": {
+        "foreground": "#81a2be"
+      }
+    },
+    {
+      "name": "Classes & Types",
+      "scope": ["entity.name.class", "entity.name.type", "support.class", "support.type"],
+      "settings": {
+        "foreground": "#f0c674"
+      }
+    },
+    {
+      "name": "HTML/JSX Tags",
+      "scope": ["entity.name.tag", "punctuation.definition.tag"],
+      "settings": {
+        "foreground": "#e06c9a"
+      }
+    },
+    {
+      "name": "HTML/JSX Attributes",
+      "scope": ["entity.other.attribute-name"],
+      "settings": {
+        "foreground": "#8abeb7"
+      }
+    },
+    {
+      "name": "Punctuation & Operators",
+      "scope": ["punctuation", "keyword.operator"],
+      "settings": {
+        "foreground": "#9896a4"
+      }
+    },
+    {
+      "name": "Variables",
+      "scope": ["variable", "variable.other.readwrite"],
+      "settings": {
+        "foreground": "#e2e0e7"
+      }
+    },
+    {
+      "name": "Object properties",
+      "scope": ["variable.object.property", "meta.property.object", "support.type.property-name"],
+      "settings": {
+        "foreground": "#81a2be"
+      }
+    },
+    {
+      "name": "Parameters",
+      "scope": ["variable.parameter"],
+      "settings": {
+        "foreground": "#cc6666"
+      }
+    },
+    {
+      "name": "This/Self",
+      "scope": ["variable.language.this", "variable.language.self"],
+      "settings": {
+        "foreground": "#e06c9a"
+      }
+    },
+    {
+      "name": "JSON keys",
+      "scope": ["support.type.property-name.json"],
+      "settings": {
+        "foreground": "#81a2be"
+      }
+    },
+    {
+      "name": "Template strings interpolation",
+      "scope": ["string.template variable", "punctuation.definition.template-expression"],
+      "settings": {
+        "foreground": "#c9a0dc"
+      }
+    },
+    {
+      "name": "Regex",
+      "scope": ["string.regexp"],
+      "settings": {
+        "foreground": "#8abeb7"
+      }
+    }
+  ]
+}
