@@ -12,6 +12,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { SmoothPre } from "./smooth-pre";
+import { CodeWindow } from "./code-window";
 import { HugeiconsIcon } from "@hugeicons/react";
 import {
   UserGroupIcon,
@@ -38,7 +39,7 @@ const Schema = Block.extend({
     Block.extend({
       code: HighlightedCodeBlock.optional(),
       preview: z.array(Block).optional(),
-    })
+    }),
   ),
 });
 
@@ -200,21 +201,18 @@ export function Scrollycoding(props: ScrollycodingProps) {
 
 function CodeDisplay({ code }: { code: HighlightedCode }) {
   return (
-    <div className="font-mono">
-      {code.meta && (
-        <div className="text-xs text-muted-foreground mb-3 opacity-60">
-          {code.meta}
-        </div>
-      )}
-      <Pre
-        code={code}
-        handlers={[tokenTransitions]}
-        className="text-[13px] leading-[1.8]"
-        style={{
-          ...code.style,
-          background: "transparent",
-        }}
-      />
-    </div>
+    <CodeWindow className="my-0 shadow-2xl bg-[#111111] border-zinc-800/50">
+      <div className="p-4">
+        <Pre
+          code={code}
+          handlers={[tokenTransitions]}
+          className="text-[13px]"
+          style={{
+            ...code.style,
+            background: "transparent",
+          }}
+        />
+      </div>
+    </CodeWindow>
   );
 }

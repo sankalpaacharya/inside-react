@@ -1,28 +1,22 @@
 "use client";
 
 import { HighlightedCode, Pre } from "codehike/code";
-import { CopyButton } from "./copy-button";
+import { CodeWindow } from "./code-window";
 
 export function Code({ codeblock }: { codeblock: HighlightedCode }) {
   return (
-    <div className="relative my-6 rounded-xl border border-border bg-zinc-950 overflow-hidden shadow-lg">
-      {/* Header with filename and copy button */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-zinc-900/50">
-        <span className="text-sm text-muted-foreground font-mono">
-          {codeblock.meta || codeblock.lang}
-        </span>
-        <CopyButton text={codeblock.value} />
-      </div>
-
-      {/* Code content */}
-      <div className="overflow-x-auto">
+    <CodeWindow>
+      <div className="overflow-x-auto p-4">
         <Pre
           code={codeblock}
-          className="p-4 text-sm leading-relaxed"
-          style={codeblock.style}
+          className="text-sm"
+          style={{
+            ...codeblock.style,
+            background: "transparent",
+          }}
         />
       </div>
-    </div>
+    </CodeWindow>
   );
 }
 

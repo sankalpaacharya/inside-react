@@ -1,73 +1,57 @@
 ---
-title: "Mental Model- React as a Runtime"
-description: "Understanding the brain of your computer - how CPUs work and why they matter"
+title: "Mental Model- React as a UI Runtime"
+description: "Correct Mental Model for the react"
 date: "2026-02-03"
 topic: "React"
 ---
 
-## Mental Model
+A lot of confusion of mine got clear when i got the correct mental model for the react, it became much more eaiser for me to understand other concept about react as well and i will share same what i learned 
 
-When you're learning React, it helps to have a mental model of what's actually happening under the hood. React isn't just a templating library – it's a **runtime** that manages your UI.
-
-Think of it this way: instead of you manually telling the browser what to change, you describe **what the UI should look like**, and React figures out how to make it happen.
+{/* <img src="/react/confused.svg" alt="Confused face" width="300" height="100" style={{ display: 'block', margin: '2rem auto' }} /> */}
 
 
-how to write this part 
-- showing people the painpoint of the manual dom manupliation and how hard it is to change the state manually 
-- showing what exactly react does to solve this pain point 
-- if it's UI library what exactly is the UI. UI is justa tree like structure and the main idea of the react is so change the 
-UI structure it just tells how out UI should look like at a particular time, that is why we have different react renderer
-showing few renderer like maybe a react native or some hardware level stuff, or maybe a pdf would be better
-once people understand what exactly is react and what it is doing we can movve to other 
+<img src="/react/youtube.svg" alt="Confused face" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-
-I would like to divide the react into two parts -
-- react core 
-- react renderer 
+We all know react is a UI library but let’s snap back and think what is UI, its is visual surface where we interact, UI consists of buttons, links, colors, image, layouts, icons etc 
 
 
 
-ok so 
-we will start with the the pain point of the dom manupliation( browser pain, single thread and etc) 
-we will talk about the fiber and single thread when we will talk about the fiber later on but rn it's not necessary to 
-discuss  up til that point 
+for web we have different html tags like button div, a, img etc to create these UI elements and for mobile apps we have native components like View Pressable, scrollview etc for those who are not familiar with mobile development don’t worry they are just like html tags but for mobile app.
 
+no matter if it’s a mobile UI or the web UI they share one common thing that is hierarchy, they both same some tree like structure don’t they? 
 
-show them what exactly is the UI library (my linkedin post for the reference)
-i will do one think today that is write a single blog on why react is just a runtime post it in tech nepal 
-get the people review one blog today, and once i explore more deeply i will share on reactiflux later on
+```tsx
+const a = "sankalpa"
+```
 
+in web you see a button, img tag is inside div tag and div tag is inside a body tag.
 
+same for mobile as well we have View component and inside you create pressable component etc
 
+keeping this in mind let’s move forward 
 
+i would like to break react  in two parts one is reconciler and another one is host instance
 
+even if you check the react source code you will see two different package 
+	⁃	react-reconciler 
+	⁃	react-dom 
 
-personal note for me 
-insert the dan blog here 
-I think the dan has a great blog on this, we know react is a UI library, lets addcj
-this on the reference i thin 
+these two packages are the one you use in web building websites i will get into why i’m diving the react into two parts
 
-i think adding the reference at the end of the blog will more suitable then saying this blog helped me
+ insert image here from the github repo
 
+this single distinction alone will help us understand later concepts(other blog in series)
 
-React is a UI library? but let's understand the pain point of 
+this distinction will help us understand how react works
 
-the reason i think the mental model matters more than before we even start talking about the react and the other 
-internal things. 
+react basically works on two phase one is render phase and one is commit phase(in later blog on this series) 
 
-I  
+make a illustration here for better understanding 
 
+reconciliation is basically your render phase and react-dom is the commit phase 
 
-understadning of UI first i think that will make things more early
+reconciliation is nothing but it’s just a diffing algorithm which checks two dom tree and finds the difference and difference are added are commit into the web
 
+we will discuss about these in later blog post but for now keep in mind it works in two phase
 
-before we start the internal i think it's important for us to think what react actually is and how it does 
-we know react is a UI library. is it so? 
-
-let's think of react as the Runtime whic
-
-
-
-
-
-
+let’s get back to our UI philosophy
