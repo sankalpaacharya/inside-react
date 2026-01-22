@@ -6,6 +6,7 @@ import { remarkCodeHike, recmaCodeHike, type CodeHikeConfig } from "codehike/mdx
 import { MockTweet } from "@/components/ui/mock-tweet";
 import { TweetGroup } from "@/components/ui/tweet-group";
 import { CodeSandbox } from "@/components/ui/codesandbox";
+import { Sandpack } from "@/components/ui/sandpack";
 import { Code } from "@/components/ui/code";
 import { Scrollycoding } from "@/components/ui/scrollycoding";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -29,6 +30,7 @@ const mdxComponents = {
   MockTweet,
   TweetGroup,
   CodeSandbox,
+  Sandpack,
   Code,
   Scrollycoding,
   HugeiconsIcon,
