@@ -15,7 +15,7 @@ export function UserCardDemo() {
     <Card className='max-w-md  mx-auto border px-2 border-pink-500 not-prose'>
     <CardContent className="border border-violet-500 p-2">
   <p>
-    A minimal card UI composed of reusable components.
+    It's fun learning always
   </p>
 </CardContent> 
       <CardFooter className='justify-between gap-3 max-sm:flex-col max-sm:items-stretch border border-cyan-500 p-2'>

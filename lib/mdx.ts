@@ -11,7 +11,8 @@ import { Code } from "@/components/ui/code";
 import { Scrollycoding } from "@/components/ui/scrollycoding";
 import { HugeiconsIcon } from "@hugeicons/react";
 import { UserGroupIcon, CheckmarkBadge01Icon, NoteIcon } from "@hugeicons/core-free-icons";
-import { UserCardDemo } from "@/components/user-card";
+import { UserCardDemo } from "@/components/mental-model/user-card";
+import ReconcileDemo from "@/components/mental-model/reconcile-animation";
 
 import premiumTheme from "./premium-theme.json";
 
@@ -39,6 +40,7 @@ const mdxComponents = {
   CheckmarkBadge,
   Note,
   UserCardDemo,
+  ReconcileDemo,
 };
 
 const CONTENT_DIR = path.join(process.cwd(), "content/blog");
