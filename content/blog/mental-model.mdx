@@ -1,13 +1,13 @@
 ---
-title: "Running React on different Platforms"
+title: "Running React on different platform"
 description: "The correct mental model for understanding React across platforms"
 date: "2026-02-03"
 topic: "React"
 ---
 
 We build web apps with React. We build mobile apps with React. We even build 3D apps with React. And yet,
-we write the same kind of code everywhere the same `useState` and `useEffect` hooks, the same function components,
-the same mental model.
+we write the same kind of code everywhere: the same `useState` and `useEffect` hooks, the same function components,
+and the same mental model.
 
 Now this raises an interesting question 🤔: how does the same React code run on such different platforms? A web app uses the DOM, a mobile
 app uses native views, and a 3D app might use canvas or WebGL. These systems have completely different
@@ -15,12 +15,12 @@ ways of drawing UI.
 
 <img src="/react/meme.png" alt="Apple UI example" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-I have been using React for years without even understanding what it really is. I knew about React Native for building mobile apps, and there are a ton of other React libraries for different platforms, but I never really tried to understand how people were using React across platforms. My curiosity about how it all works was finally satisfied when I understood what React truly is.
+I have been using React for years without even understanding what it really is. I knew about React Native for building mobile apps, and there are tons of other React libraries for different platforms, but I never really tried to understand how people were using React across platforms. My curiosity about how it all works was finally satisfied when I understood what React truly is.
 
-For this blog i just want to shape the mental model of what react is without giving too much about react internals.
+For this blog, I just want to shape the mental model of what React is without diving too deep into React internals.
 
 If you are a little curious about how React runs on different platforms,
-then this blog is for you. We will build a mental model for what React is, unwrap small pieces step by step.
+then this blog is for you. We will build a mental model for what React is, unwrapping small pieces step by step.
 
 # UI as tree
 
@@ -69,7 +69,7 @@ Card
 ```
 
 
-To understand more things let's first understand how react is structured
+To understand how this works, let's first understand how React is structured
 
 # React in Two Parts
 
@@ -85,14 +85,14 @@ This distinction is crucial for understanding how React works across multiple pl
 <img src="/react/ui-runtime.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 If you check the [React source code](https://github.com/facebook/react/tree/main/packages), you’ll see two separate packages: `react-reconciler` and `react-dom`.
-these two packages are the one you use to build your web apps
+These two packages are the ones you use to build your web apps.
 
 <img src="/react/react-source-code.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 # react-reconciler
 
-The reconciler handles your props, state, effects, lifecycles, concurrent mode, context, etc. Reconciler is the brain of react, it does all
-the magic calculation and give the output to renderer
+The reconciler handles your props, state, effects, lifecycles, concurrent mode, context, etc. The Reconciler is the brain of React; it performs all
+the necessary calculations and gives the output to the renderer
 
 Let's look at an example
 
@@ -188,10 +188,10 @@ border-color: #fca5a5;
 
 In this example, we have a `Text` component and a `CounterApp` component. We are passing count into the `Text` component via props.
 
-when you first run this code, reconciler internally makes a UI tree for itself, it has no idea about the DOM. It just took your jsx components 
-files and built a UI tree 
+When you first run this code, the reconciler internally makes a UI tree for itself; it has no idea about the DOM. It just takes your JSX component 
+files and builds a UI tree 
 
-for those of you who has some idea of react internals, yes it's the `fiber` object
+For those of you who have some idea of React internals, yes, it's the `fiber` object
 
 <img src="/react/card.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
@@ -201,36 +201,36 @@ When state updates happen, React continues to work only with this in-memory UI t
 <img src="/react/clicked.png" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 
-When you click the `increment` button you just called a `setCount` function to change the state. what we did here is just 
-we requested to the reconciler to re-render our component. well you don't directly request to reconciler through your code it's just the 
-how internally works. all you did is just called `setCount` function and what's what triggered the re-render
+When you click the `increment` button, you call the `setCount` function to change the state. What happens here is that 
+we request the reconciler to re-render our component. Well, you don't directly request the reconciler through your code; it's just 
+how it works internally. All you did was call the `setCount` function, and that's what triggered the re-render
 
 
-now reconciler will create a new updated UI tree re-running your relavent component with new state value.
+Now, the reconciler will create a new, updated UI tree by re-running your relevant component with the new state value.
 
 <img src="/react/cardnew.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-once the new UI tree is created it compares the old UI tree and new UI tree
+Once the new UI tree is created, it compares the old UI tree with the new UI tree
 
 <img src="/react/compare.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 
-after the comparession it comes with the conolusion(effects), _we have everything same, `button`, `h3` and other component looks fine so we don't need to touch them 
-only the text in the span tag needs an update_ 
+After the comparison, it comes to a conclusion (effects): _we have everything the same; `button`, `h3`, and other components look fine, so we don't need to touch them.
+Only the text in the span tag needs an update._ 
 
-reconciler just came with a list of effects need to be done on DOM but it itself doesn't do that, if you notice it doesn't even know there is something called `DOM` it's just happy with it's in 
+The reconciler just produced a list of effects that need to be applied to the DOM, but it doesn't apply them itself. In fact, it doesn't even know what the DOM is; it's just happy with its in-
 memory UI tree
 
 
 
 # react-dom (Host Renderer)
 
-Now, once we have the list of effects, _what to dos_ it's the work of host-renderer to take those effects and apply them.
+Now that we have the list of effects (the "what to do"), it's the job of the host renderer to take those effects and apply them.
 
 Every UI element can be created, updated, or removed using **platform-specific imperative APIs**. For example, the DOM uses `appendChild`, while iOS uses `addSubview`.
 
-react-dom uses the DOM APIs to work with those effects given by the reconciler, it does the work of updating text removing element or creating an element
-in our example we simply update the `textNode` in the `span` tag
+`react-dom` uses the DOM APIs to work with those effects given by the reconciler. It does the work of updating text, removing elements, or creating elements.
+In our example, we simply update the `textNode` in the `span` tag
 
 ```js
 textNode.nodeValue = "1"
@@ -247,14 +247,14 @@ The host instance is the actual DOM node (or native view in React Native) that R
 
 This separation allows React to reuse the same reconciliation logic across platforms. Think of it like this:
 
-_I know what changed. how to update effectively what needs to be done, i will give you the list of work to be done on UI, you host-renderer do the rest_
+_I know what changed. I know how to update efficiently. I will give you the list of work to be done on the UI; you, host renderer, do the rest._
 
 This is why you can **use the same hooks (`useState`, `useEffect`) and function components everywhere**, whether the platform is DOM, mobile native components, or canvas.
 
 
 ## react-ink
 
-react-link is a another react-renderer for building a terminal apps
+`react-ink` is another React renderer for building terminal apps
 
 ```tsx 
 
@@ -282,9 +282,9 @@ render(<Counter />);
 ```
 <img src="/react/demo.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-you can use the same power of react which is `functional component`, `hooks`, `jsx syntax` etc but now the output is not a DOM nodes rather a terminal UI. 
+You can use the same power of React, which includes `functional components`, `hooks`, `JSX syntax`, etc., but now the output is not DOM nodes, but rather a terminal UI. 
 
-so host renderer decided how to draw and reconciler gives the optimal answer of what to draw and where to draw 🤯
+So, the host renderer decides how to draw, and the reconciler provides the optimal answer of what to draw and where to draw 🤯
 
 
 # Why diffing?
@@ -324,13 +324,5 @@ With React, you simply say:
 
 React figures out when to re-render, what changed, and how to update the real UI.
 
-# Summary
 
-UI on any platform forms a **tree structure**. React keeps its own version of this tree in memory. When state changes, React builds a new tree, compares it with the old one, and updates **only what actually changed** using platform-specific APIs.
-
-This is how React keeps your data and UI in sync, without manually touching the DOM or native APIs.
-
-<img src="/react/host.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
-
-<img src="/react/connected.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
