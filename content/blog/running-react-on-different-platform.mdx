@@ -52,7 +52,7 @@ For **mobile apps**, we have native components like `View`, `Pressable`, and `Te
 ```
 
 When working with UI, we always see the same pattern, whether we are building a mobile app, web app, or anything else: the **hierarchy between UI elements**. 
-You have `button` and `img` inside a `div` or `Image` and `Pressable` inside a `View`; they all form a tree-like structure.
+You have `button` and `img` inside a `div` or `Image` and `Pressable` inside a `View` they all form a tree-like structure.
 
 <UserCardDemo/>
 
@@ -80,7 +80,7 @@ React can be thought of as **two separate pieces**:
 * **Reconciler** – the part that compares UI trees and decides what needs to change (diffing algorithm)
 * **Host Instance** – the platform-specific renderer (DOM nodes, native views, etc.)
 
-This distinction is crucial for understanding how React works across multiple platforms. React is not just a UI library; it’s more like a **UI runtime**.
+This distinction is crucial for understanding how React works across multiple platforms. React is not just a UI library it’s more like a **UI runtime**.
 
 <img src="/react/ui-runtime.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
@@ -91,7 +91,7 @@ These two packages are the ones you use to build your web apps.
 
 # react-reconciler
 
-The reconciler handles your props, state, effects, lifecycles, concurrent mode, context, etc. The Reconciler is the brain of React; it performs all
+The reconciler handles your props, state, effects, lifecycles, concurrent mode, context, etc. The Reconciler is the brain of React it performs all
 the necessary calculations and gives the output to the renderer
 
 Let's look at an example
@@ -203,7 +203,7 @@ When state updates happen, React continues to work only with this in-memory UI t
 
 
 When you click the `increment` button, you call the `setCount` function to change the state. What happens here is that 
-we request the reconciler to re-render our component. Well, you don't directly request the reconciler through your code; it's just 
+we request the reconciler to re-render our component. Well, you don't directly request the reconciler through your code it's just 
 how it works internally. All you did was call the `setCount` function, and that's what triggered the re-render
 
 
@@ -216,10 +216,10 @@ Once the new UI tree is created, it compares the old UI tree with the new UI tre
 <img src="/react/compare.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 
-After the comparison, it comes to a conclusion (effects): _we have everything the same; `button`, `h3`, and other components look fine, so we don't need to touch them.
+After the comparison, it comes to a conclusion (effects): _we have everything the same `button`, `h3`, and other components look fine, so we don't need to touch them.
 Only the text in the span tag needs an update._ 
 
-The reconciler just produced a list of effects that need to be applied to the DOM, but it doesn't apply them itself. In fact, it doesn't even know what the DOM is; it's just happy with its in-
+The reconciler just produced a list of effects that need to be applied to the DOM, but it doesn't apply them itself. In fact, it doesn't even know what the DOM is it's just happy with its in-
 memory UI tree
 
 # Why diffing?
@@ -253,15 +253,13 @@ The host instance is the actual DOM node (or native view in React Native) that R
 * Canvas, WebGL, or anything else
 
 # Why this split matters
-
-This separation allows React to reuse the same reconciliation logic across platforms. Think of it like this:
-
-_I know what changed. I know how to update efficiently. I will give you the list of work to be done on the UI; you, host renderer, do the rest._
-
-This is why you can **use the same hooks (`useState`, `useEffect`) and function components everywhere**, whether the platform is DOM, mobile native components, or canvas.
+This separation matters because it lets React focus on one thing at a time. The reconciler decides what changed and what updates are needed, without touching the platform. After that, the host renderer takes those decisions and turns them into real UI updates using platform-specific APIs.
 
 
-## react-ink
+Once you see it this way, it becomes clear why the same component model and hooks like `useState` and `useEffect` work everywhere. From React’s perspective, state updates behave the same whether the UI ends up in the DOM, native views, or canvas.
+
+
+## [react-ink](https://github.com/vadimdemedes/ink)
 
 `react-ink` is another React renderer for building terminal apps
 
@@ -296,33 +294,18 @@ You can use the same power of React, which includes `functional components`, `ho
 So, the host renderer decides how to draw, and the reconciler provides the optimal answer of what to draw and where to draw 🤯
 
 
-# What if no React?
 
-React is a declarative UI library that automatically syncs state with the rendered UI.
 
-```js
-const el = document.createElement("div")
-el.textContent = count
-document.body.appendChild(el)
+# Conclusion
 
-button.addEventListener("click", () => {
-  count++
-  el.textContent = count
-})
-```
+Just understanding this split and seeing how React can work across different platforms was a _eureka_ moment for me. It helped me realize that `render` and `commit` are two phases working together, and now they make sense instead of feeling abstract.
 
-Without React, you’d manually handle:
+I tried to keep this blog more beginner friendly but if you would like to read more 
 
-* Creating elements
-* Updating text
-* Wiring updates
-* Keeping everything in sync
+- [react as a ui run time](https://overreacted.io/react-as-a-ui-runtime/) 
+- [understanding your ui as a tree](https://react.dev/learn/understanding-your-ui-as-a-tree)
 
-With React, you simply say:
-
-> “When state is `count`, the UI should look like this.”
-
-React figures out when to re-render, what changed, and how to update the real UI.
+I hope this blog gave you a clearer idea of how React works and something useful to take away. Thanks for reading ❤️
 
 
 
