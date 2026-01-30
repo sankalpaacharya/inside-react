@@ -19,7 +19,10 @@ export function SecurityFindings() {
                         <span className="font-medium text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
                             sso.agora.io <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                         </span>
-                        <span className="text-sm font-mono text-emerald-500">$500 Reward</span>
+                        <div className="flex flex-col items-end gap-1">
+                            <span className="text-sm font-mono text-emerald-500">$500 Reward</span>
+                            <span className="text-[10px] font-mono text-muted-foreground/60">2021</span>
+                        </div>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                         Discovered a critical Broken Access Control vulnerability. I demonstrated how manipulating cookie parameters allowed for full account takeover without valid credentials.
@@ -35,7 +38,10 @@ export function SecurityFindings() {
                         <span className="font-medium text-foreground group-hover:text-primary transition-colors flex items-center gap-2">
                             LeetCode <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} className="opacity-0 group-hover:opacity-100 transition-opacity" />
                         </span>
-                        <span className="text-sm font-mono text-amber-500">100 LeetCoins</span>
+                        <div className="flex flex-col items-end gap-1">
+                            <span className="text-sm font-mono text-amber-500">100 LeetCoins</span>
+                            <span className="text-[10px] font-mono text-muted-foreground/60">2023</span>
+                        </div>
                     </div>
                     <p className="text-sm text-muted-foreground leading-relaxed">
                         Identified a logical flaw in the authentication flow. The vulnerability exposed a redirection bypass that could be leveraged for account takeover under specific conditions.

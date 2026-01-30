@@ -26,13 +26,17 @@ export function OpenSource() {
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-medium text-foreground">Gaia</h3>
                             <div className="flex gap-4 text-sm shrink-0">
-                                <Link href="https://github.com/theexperiencecompany/gaia/" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
-                                    Repo <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
+                                <Link href="https://github.com/theexperiencecompany/gaia/issues?q=state%3Aclosed%20is%3Apr%20author%3Asankalpaacharya" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
+                                    Contributions <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
                                 </Link>
                             </div>
                         </div>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                            An open-source mobile application built with React Native. I am actively contributing to the mobile ecosystem, working on cross-platform compatibility and native performance optimizations.
+                            GAIA is a human-like, proactive personal assistant that works across your entire digital life, so that you don't have to. 🌎
+                        </p>
+                        <p className="text-sm text-muted-foreground leading-relaxed">
+                            I'm contributing to a gaia when i'm free it's a small team of crazy working
+                            people. @aryan and @dhruv being the active maintainers of the project.
                         </p>
                     </div>
                 </div>
