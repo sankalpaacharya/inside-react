@@ -28,7 +28,8 @@ export function NoteableProjects() {
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-medium text-foreground">Portfolio</h3>
-                            <div className="flex gap-4 text-sm shrink-0">
+                            <div className="flex gap-4 text-sm shrink-0 items-center">
+                                <span className="text-xs font-mono text-muted-foreground/60">NOV 2025 - PRESENT</span>
                                 <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
                                     Live <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
                                 </Link>
@@ -54,7 +55,8 @@ export function NoteableProjects() {
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-medium text-foreground">ChatCN</h3>
-                            <div className="flex gap-4 text-sm shrink-0">
+                            <div className="flex gap-4 text-sm shrink-0 items-center">
+                                <span className="text-xs font-mono text-muted-foreground/60">JULY 2025 - PRESENT</span>
                                 <Link href="https://chatcn.me" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
                                     chatcn.me <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
                                 </Link>
@@ -132,7 +134,8 @@ export function NoteableProjects() {
                     <div className="space-y-3">
                         <div className="flex items-center justify-between">
                             <h3 className="text-lg font-medium text-foreground">Bloomi</h3>
-                            <div className="flex gap-4 text-sm shrink-0">
+                            <div className="flex gap-4 text-sm shrink-0 items-center">
+                                <span className="text-xs font-mono text-muted-foreground/60">MAY 2025 - OCT 2025</span>
                                 <Link href="https://bloomi.live" target="_blank" className="text-muted-foreground hover:text-foreground transition-colors flex items-center gap-1">
                                     bloomi.live <HugeiconsIcon icon={ArrowUpRight01Icon} size={14} />
                                 </Link>
