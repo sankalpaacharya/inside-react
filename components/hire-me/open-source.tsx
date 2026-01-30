@@ -35,13 +35,12 @@ export function OpenSource() {
                             GAIA is a human-like, proactive personal assistant that works across your entire digital life, so that you don't have to. 🌎
                         </p>
                         <p className="text-sm text-muted-foreground leading-relaxed">
-                            I'm contributing to a gaia when i'm free it's a small team of crazy working
-                            people. @aryan and @dhruv being the active maintainers of the project.
+                            I'm contributing to gaia when I'm free—it's a small team of passionate people.
+                            <Link href="https://x.com/aryanranderiya" target="_blank" className="text-foreground hover:text-primary transition-colors font-medium"> @aryan</Link> and <Link href="https://x.com/DhruvMaradiya" target="_blank" className="text-foreground hover:text-primary transition-colors font-medium"> @dhruv</Link> being the active maintainers of the project.
                         </p>
                     </div>
                 </div>
 
-                {/* Stage (PR Rows with Icons) */}
                 <div className="space-y-4">
                     <div className="flex items-center gap-2">
                         <h3 className="text-lg font-medium text-foreground">Stage</h3>
