@@ -1,4 +1,3 @@
-import React from "react";
 import Link from "next/link";
 import { ArrowUpRight01Icon } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
@@ -14,7 +13,6 @@ export function NoteableProjects() {
 
             <div className="space-y-12">
 
-                {/* Portfolio (New) */}
                 <div className="group grid md:grid-cols-[30%_1fr] gap-8 items-start">
                     <div className="relative aspect-video w-full rounded border border-border/40 bg-muted/20 overflow-hidden">
                         <HeroVideoDialog
@@ -41,7 +39,6 @@ export function NoteableProjects() {
                     </div>
                 </div>
 
-                {/* ChatCN */}
                 <div className="group grid md:grid-cols-[30%_1fr] gap-8 items-start">
                     <div className="relative aspect-video w-full rounded border border-border/40 bg-muted/20 overflow-hidden">
                         <HeroVideoDialog
@@ -79,7 +76,6 @@ export function NoteableProjects() {
                     </div>
                 </div>
 
-                {/* WeRide */}
                 <div className="group grid md:grid-cols-[30%_1fr] gap-8 items-start">
                     <div className="relative aspect-video w-full rounded border border-border/40 bg-muted/20 overflow-hidden">
                         <HeroVideoDialog
@@ -120,7 +116,6 @@ export function NoteableProjects() {
                     </div>
                 </div>
 
-                {/* Bloomi */}
                 <div className="group grid md:grid-cols-[30%_1fr] gap-8 items-start">
                     <div className="relative aspect-video w-full rounded border border-border/40 bg-muted/20 overflow-hidden">
                         <HeroVideoDialog
