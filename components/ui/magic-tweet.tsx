@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { enrichTweet, type EnrichedTweet } from "react-tweet"
 import { type Tweet } from "react-tweet/api"
-import { ArrowUpRight01Icon, Comment01Icon, Bookmark01Icon, RepeatIcon, FavouriteIcon } from "@hugeicons/core-free-icons"
+import {ArrowUpRight01Icon, Comment01Icon, Bookmark01Icon, RepeatIcon, FavouriteIcon } from "@hugeicons/core-free-icons"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { cn } from "@/lib/utils"
 
