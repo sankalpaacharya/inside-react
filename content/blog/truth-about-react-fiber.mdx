@@ -29,9 +29,9 @@ This is a really good post. It sums up so much about React, in the post he menti
 this is interesting because what problem would the JS callstack even have so that react had to get rid of it? many people 
 will say fiber exist because js is a single thread programming language but it's not an entirely true, 
 
-In this blog we will discuss why the React team chose the fiber approach, and even if we had a multithread model, that wouldn't 
-be the best solution for React.
-
+I see many windy discussion on internet when people talk about react fiber not being not very optimal way and just to optimize 
+the rendering process reconciliation algorithm didn't need a re-write, every library comes with their own trade off and
+they have their own way of solving problems
 
 To understand the solution, we have to know the problem: what was hindering React's performance, what the React team came up with. This post explains 
 about the React scheduler
@@ -184,8 +184,6 @@ This is why React apps felt laggy.
 
 ## Priority
 
-<img src="/blog/fiber/slow.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
-
 There was a second problem. React treated all updates equally. A button click got the same priority as a background data fetch. 
 An animation got the same priority as logging. 
 
@@ -205,13 +203,54 @@ the user cares about, seeing their typing reflected instantly.
 The products can wait. A 100ms delay in showing search results? Barely noticeable. But a 100ms delay in seeing your keystroke? 
 That feels broken.
 
-# Need of solution
 
-The React team thought this was not just going to be a small update, they needed a new way to solve this problem, 
-so they wrote a new reconciliation algorithm, which is Fiber
 
-now this new reconciliation algorithm is a whole new re-write based on a cooperative scheduling. React team 
-was testing different things and trying to optimize this reconciliation process.
+# What we need?
+
+<img src="/blog/fiber/need.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+
+Before we start looking for a solution we should be clear what we are looking in a solution? 
+
+We are facing two main problem with this recursive reconciliation approach, 
+- we can't pause the rendering process in middle (callstack level)
+- we can't assume every update have same priority 
+
+so, our solution should be able to pause the rendering process if there is another high priority task, pick that up 
+render it first and continue working where it let off.
+
+<img src="/blog/fiber/slow.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+
+_why pause at callstack level?_
+
+because thats how browsers work, unless your callstack is empty event loop will not push the click, keystroke events 
+from macro queue to a callstack
+
+
+# Solution
+
+The React team eventually realized that the problem wasn't just the reconciliation algorithm itself, but how it was being executed.
+
+No amount of small optimizations could fix this, because recursion 
+in JavaScript is fundamentally non-interruptible.
+
+Instead of trying to bend the JavaScript call stack into doing 
+something it was never meant to do, React gave up on the recursive 
+model entirely. They stopped letting the JS engine drive 
+reconciliation and built their own abstraction on top of it.
+
+That abstraction is Fiber.
+
+Fiber doesn't control the callstack, nothing can, because the 
+callstack is fundamentally built into JavaScript itself. What 
+Fiber controls is how we structure and execute our rendering work.
+
+Instead of running the whole render process at once recursively, 
+React now divides the entire reconciliation into small units of 
+work. Now you only fill the callstack with a few small units of 
+work for a short time (~5ms). After that, your callstack is empty, 
+and the browser gets a chance to handle events like clicks or 
+keystrokes.
+
 
 To understand this better, let's look at the original design principles documented by Sebastian Markbåge (one of the core React team members):
 
@@ -225,16 +264,4 @@ To understand this better, let's look at the original design principles document
 />
 </div>
 
-I will just break down this documentation. If you would like to read it yourself, feel free to do so. 
 
-
-let's not jump straight into React Fiber, let's try to think ourselves about how we can come up with a solution. 
-
-Now this is an intuition I wanna build up, but if you are in a rush and just wanna read about Fiber, you can skip this part!
-
-We have a few options in our basket, maybe we can use multithreading (web workers). 
-
-
-The React team thought they needed a solution to this problem. React can't treat every task as equal priority. 
-If a user clicks a button, we should halt the rendering process for a while, process that click event 
-first, and then continue what we were doing.
