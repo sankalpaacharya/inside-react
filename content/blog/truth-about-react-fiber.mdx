@@ -1,5 +1,5 @@
 ---
-title: "React Fiber"
+title: "React Fiber Deep Dive"
 description: "React fiber"
 date: "2026-01-26"
 topic: "React"
@@ -7,7 +7,6 @@ draft: true
 ---
 
 A while ago, scrolling Twitter, I stumbled upon this interesting post.
-
 
 <div className='not-prose flex justify-center'> 
 <TweetCard 
@@ -24,7 +23,7 @@ This is a really good post. It sums up so much about React, in the post he menti
 
 > react finally got freedom from the JS callstack. instead of recursive rendering, it’s this iterative stepping through fibers one by one. and that suddenly means react can pause. like just literally stop mid render, drop everything, let the browser repaint, handle input, chill, take a breath, then pick up exactly where it left off inside that huge UI tree. no more “oh no i’m stuck deep in recursion”. you can’t get stuck because react isn’t using the builtin stack anymore. it’s rolling its own.
 
-"react finally got freedom from the JS callstack" 🤔 
+"react finally got freedom from the JS callstack" _hmm_
 
 this is interesting because what problem would the JS callstack even have so that react had to get rid of it? many people 
 will say fiber exist because js is a single thread programming language but it's not an entirely true, 
@@ -184,6 +183,8 @@ This is why React apps felt laggy.
 
 ## Priority
 
+<img src="/blog/fiber/rendering.png" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+
 There was a second problem. React treated all updates equally. A button click got the same priority as a background data fetch. 
 An animation got the same priority as logging. 
 
@@ -218,15 +219,22 @@ We are facing two main problem with this recursive reconciliation approach,
 so, our solution should be able to pause the rendering process if there is another high priority task, pick that up 
 render it first and continue working where it let off.
 
-<img src="/blog/fiber/slow.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 _why pause at callstack level?_
 
-because thats how browsers work, unless your callstack is empty event loop will not push the click, keystroke events 
-from macro queue to a callstack
+<img src="/blog/fiber/waiting.png" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
+
+
+because thats how browsers work, unless your callstack is empty browser can't push the click, keystroke events 
+from macro queue to a callstack.
+
+so browser is just like _finish whatever you have in your plate and i will give you more_ but if your recursive 
+functions takes way too long to process, browser won't have the control to push those events in a callstack.
 
 # Solution
+
+<img src="/blog/fiber/solution.png" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
 The React team eventually realized that the problem wasn't just the reconciliation algorithm itself, but how it was being executed.
 
@@ -246,11 +254,76 @@ Fiber controls is how we structure and execute our rendering work.
 
 Instead of running the whole render process at once recursively, 
 React now divides the entire reconciliation into small units of 
-work. Now you only fill the callstack with a few small units of 
-work for a short time (~5ms). After that, your callstack is empty, 
-and the browser gets a chance to handle events like clicks or 
-keystrokes.
+work. React processes one unit, then returns 
+control to the browser. The callstack clears. The browser handles 
+any pending events. Then React comes back and processes the next 
+unit.
 
+This happens in small time slices React works for ~5ms, then 
+yields. The browser breathes. Then React continues where it left 
+off
+
+# Deep Dive
+
+```tsx 
+function FiberNode(
+  this: $FlowFixMe,
+  tag: WorkTag,
+  pendingProps: mixed,
+  key: ReactKey,
+  mode: TypeOfMode,
+) {
+  // Instance
+  this.tag = tag;
+  this.key = key;
+  this.elementType = null;
+  this.type = null;
+  this.stateNode = null;
+
+  // Fiber
+  this.return = null;
+  this.child = null;
+  this.sibling = null;
+  this.index = 0;
+
+  this.ref = null;
+  this.refCleanup = null;
+
+  this.pendingProps = pendingProps;
+  this.memoizedProps = null;
+  this.updateQueue = null;
+  this.memoizedState = null;
+  this.dependencies = null;
+
+  this.mode = mode;
+
+  // Effects
+  this.flags = NoFlags;
+  this.subtreeFlags = NoFlags;
+  this.deletions = null;
+
+  this.lanes = NoLanes;
+  this.childLanes = NoLanes;
+
+  this.alternate = null;
+
+```
+
+
+ut wait—if React exits the callstack, how does it remember where 
+it was?
+
+This is where Fiber's structure matters. React represents your 
+component tree as a linked list of objects. Each object (a "fiber") 
+has pointers to:
+- Its first child
+- Its next sibling  
+- Its parent
+
+So when React yields control, it just saves a pointer: "I was 
+working on this fiber." When it comes back, it follows the pointers 
+to find the next unit of work. No call stack needed—React is 
+walking its own data structure.
 
 To understand this better, let's look at the original design principles documented by Sebastian Markbåge (one of the core React team members):
 
