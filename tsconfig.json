@@ -34,7 +34,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "content/blog/truth-about-react-fiber.mdx"
+    "content/blog/a-deep-dive-into-react-fiber.mdx"
   ],
   "exclude": [
     "node_modules"
