@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getPostFrontmatter } from "@/lib/mdx-data";
+import { getPostFrontmatter, getAllPostSlugs } from "@/lib/mdx-data";
 
 export const runtime = "nodejs";
 export const alt = "Blog Post";
@@ -8,6 +8,12 @@ export const size = {
     height: 630,
 };
 export const contentType = "image/png";
+
+// Generate static params so Twitter images are built at build time
+export function generateStaticParams() {
+    const slugs = getAllPostSlugs();
+    return slugs.map((slug) => ({ slug }));
+}
 
 export default async function Image({
     params,

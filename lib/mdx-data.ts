@@ -81,33 +81,39 @@ export function getAllPostSlugs(): string[] {
  * Includes in-memory caching with mtime checking for dev mode performance
  */
 export function getPostFrontmatter(slug: string): Post | null {
-    const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
-    if (!fs.existsSync(filePath)) {
-        return null;
-    }
+    try {
+        const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
+        
+        if (!fs.existsSync(filePath)) {
+            return null;
+        }
 
-    // Check cache with mtime validation (for hot reload support in dev)
-    const stats = fs.statSync(filePath);
-    const mtime = stats.mtimeMs;
-    const cached = frontmatterCache.get(slug);
+        // Check cache with mtime validation (for hot reload support in dev)
+        const stats = fs.statSync(filePath);
+        const mtime = stats.mtimeMs;
+        const cached = frontmatterCache.get(slug);
 
-    if (cached && cached.mtime === mtime) {
+        if (cached && cached.mtime === mtime) {
+            return {
+                slug,
+                frontmatter: cached.data,
+            };
+        }
+
+        const source = fs.readFileSync(filePath, "utf-8");
+        const { data } = matter(source);
+
+        // Update cache
+        frontmatterCache.set(slug, { data: data as PostFrontmatter, mtime });
+
         return {
             slug,
-            frontmatter: cached.data,
+            frontmatter: data as PostFrontmatter,
         };
+    } catch (error) {
+        console.error(`[getPostFrontmatter] Error for slug "${slug}":`, error);
+        return null;
     }
-
-    const source = fs.readFileSync(filePath, "utf-8");
-    const { data } = matter(source);
-
-    // Update cache
-    frontmatterCache.set(slug, { data: data as PostFrontmatter, mtime });
-
-    return {
-        slug,
-        frontmatter: data as PostFrontmatter,
-    };
 }
 
 export function isScrollyPost(slug: string): boolean {
