@@ -2,48 +2,48 @@
 // This allows OG images to work without filesystem access at runtime
 
 export interface PostMeta {
-  slug: string;
-  title: string;
-  description: string;
-  topic: string;
-  date: string;
+    slug: string;
+    title: string;
+    description: string;
+    topic: string;
+    date: string;
 }
 
 export const postsData: Record<string, PostMeta> = {
-  "birth-of-react": {
-    slug: "birth-of-react",
-    title: "The Birth of React",
-    description: "How React came to be and why it changed everything",
-    topic: "React",
-    date: "2026-01-30",
-  },
-  "Intro-of-series": {
-    slug: "Intro-of-series",
-    title: "Introduction to the Series",
-    description: "Welcome to Inside React - a deep dive into React internals",
-    topic: "React",
-    date: "2026-01-30",
-  },
-  "running-react-on-different-platform": {
-    slug: "running-react-on-different-platform",
-    title: "Running React on different platform",
-    description: "The correct mental model for understanding React across platforms",
-    topic: "React",
-    date: "2026-01-26",
-  },
-  "understanding-why-react-fiber-exists": {
-    slug: "understanding-why-react-fiber-exists",
-    title: "Understanding Why React Fiber Exists",
-    description: "Understanding Why React Fiber Exists and how it lets React pause, prioritize",
-    topic: "React",
-    date: "2026-02-10",
-  },
+    "birth-of-react": {
+        slug: "birth-of-react",
+        title: "The Birth of React",
+        description: "How React came to be and why it changed everything",
+        topic: "React",
+        date: "2026-01-30",
+    },
+    "Intro-of-series": {
+        slug: "Intro-of-series",
+        title: "Introduction to the Series",
+        description: "Welcome to Inside React - a deep dive into React internals",
+        topic: "React",
+        date: "2026-01-30",
+    },
+    "running-react-on-different-platform": {
+        slug: "running-react-on-different-platform",
+        title: "Running React on different platform",
+        description: "The correct mental model for understanding React across platforms",
+        topic: "React",
+        date: "2026-01-26",
+    },
+    "understanding-why-react-fiber-exists": {
+        slug: "understanding-why-react-fiber-exists",
+        title: "Understanding Why React Fiber Exists",
+        description: "Understanding Why React Fiber Exists and how it lets React pause, prioritize",
+        topic: "React",
+        date: "2026-02-10",
+    },
 };
 
 export function getPostMeta(slug: string): PostMeta | null {
-  return postsData[slug] || null;
+    return postsData[slug] || null;
 }
 
 export function getAllPostMetas(): PostMeta[] {
-  return Object.values(postsData);
+    return Object.values(postsData);
 }
