@@ -108,22 +108,16 @@ export default async function Image() {
               gap: "16px",
             }}
           >
-            {/* Author avatar placeholder */}
-            <div
+            {/* Author avatar */}
+            <img
+              src="https://github.com/sankalpaacharya.png"
+              width={56}
+              height={56}
               style={{
-                width: "56px",
-                height: "56px",
                 borderRadius: "50%",
-                backgroundColor: "#e8a87c",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                border: "2px solid rgba(232, 168, 124, 0.5)",
               }}
-            >
-              <span style={{ fontSize: 24, color: "#0a0a0a", fontWeight: 600 }}>
-                S
-              </span>
-            </div>
+            />
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span
                 style={{ color: "#ffffff", fontSize: 22, fontWeight: 600 }}

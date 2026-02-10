@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getPostFrontmatter, getAllPostSlugs } from "@/lib/mdx-data";
+import { getPostMeta, postsData } from "@/lib/posts-data";
 
 export const runtime = "nodejs";
 export const alt = "Blog Post";
@@ -11,8 +11,7 @@ export const contentType = "image/png";
 
 // Generate static params so OG images are built at build time
 export function generateStaticParams() {
-    const slugs = getAllPostSlugs();
-    return slugs.map((slug) => ({ slug }));
+    return Object.keys(postsData).map((slug) => ({ slug }));
 }
 
 export default async function Image({
@@ -21,7 +20,7 @@ export default async function Image({
     params: Promise<{ slug: string }>;
 }) {
     const { slug } = await params;
-    const post = getPostFrontmatter(slug);
+    const post = getPostMeta(slug);
 
     if (!post) {
         return new ImageResponse(
@@ -39,15 +38,16 @@ export default async function Image({
                     }}
                 >
                     <div style={{ fontSize: 60, fontWeight: 700 }}>Post Not Found</div>
+                    <div style={{ fontSize: 24, color: "rgba(255,255,255,0.5)", marginTop: 20 }}>
+                        Slug: {slug}
+                    </div>
                 </div>
             ),
             { ...size }
         );
     }
 
-    const title = post.frontmatter.title;
-    const description = post.frontmatter.description;
-    const topic = post.frontmatter.topic;
+    const { title, description, topic } = post;
 
     return new ImageResponse(
         (
@@ -151,28 +151,16 @@ export default async function Image({
                             gap: "16px",
                         }}
                     >
-                        {/* Author avatar placeholder */}
-                        <div
+                        {/* Author avatar */}
+                        <img
+                            src="https://github.com/sankalpaacharya.png"
+                            width={56}
+                            height={56}
                             style={{
-                                width: "56px",
-                                height: "56px",
                                 borderRadius: "50%",
-                                background: "linear-gradient(135deg, #e8a87c 0%, #c4785c 100%)",
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
+                                border: "2px solid rgba(232, 168, 124, 0.5)",
                             }}
-                        >
-                            <span
-                                style={{
-                                    color: "#0a0a0a",
-                                    fontSize: 24,
-                                    fontWeight: 700,
-                                }}
-                            >
-                                S
-                            </span>
-                        </div>
+                        />
                         <div
                             style={{
                                 display: "flex",
@@ -186,7 +174,7 @@ export default async function Image({
                                     fontWeight: 600,
                                 }}
                             >
-                                Sanku
+                                Sankalpa Acharya
                             </span>
                             <span
                                 style={{
@@ -194,7 +182,7 @@ export default async function Image({
                                     fontSize: 16,
                                 }}
                             >
-                                sanku.blog
+                                inside-react.vercel.app
                             </span>
                         </div>
                     </div>

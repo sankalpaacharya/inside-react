@@ -83,7 +83,7 @@ export function getAllPostSlugs(): string[] {
 export function getPostFrontmatter(slug: string): Post | null {
     try {
         const filePath = path.join(CONTENT_DIR, `${slug}.mdx`);
-        
+
         if (!fs.existsSync(filePath)) {
             return null;
         }
