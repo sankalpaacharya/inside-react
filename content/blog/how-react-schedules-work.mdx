@@ -50,5 +50,30 @@ div.style.width = "500px"
 so browser just waits for js to finish it's work so that it's like _ah ok that's final thing then 
 i will do my work now_
 
+when you do the setState react will not start the rendering process immediately it will first dispatchtheupdate, 
+it will create a update object which basically preparing for the update, this update object contains 
+the lane information, egarState etc 
+
+
+react creates an update object first enqueue that updateObject, it will now go all the way up to the 
+root fiber and mark everything as a needing update (childrenLane)
+
+still the rendering hasn't started yet
+
+
+5.1 state update is not sync#
+
+    The set function only updates the state variable for the next render. If you read the state variable after calling the set function, you will still get the old value that was on the screen before your call.
+
+This is easy to understand, we’ve already seen how setState() schedules re-render in next tick, it is not sync and the updated value can only be got from next render since the state update is done in useState() not in setState().
+5.2 setState() with same value might still trigger re-render.#
+
+    If the new value you provide is identical to the current state, as determined by an Object.is comparison, React will skip re-rendering the component and its children. This is an optimization. Although in some cases React may still need to call your component before skipping the children, it shouldn’t affect your code.
+
+
+Early bailout → if React can determine before starting the render that nothing changed, it skips creating work for this fiber and all children.
+
+Normal bailout (not early) → React already started the render for this fiber. At this point, it compares previous memoized state with new state. If identical → skips children, but the fiber itself was “touched” for this render.
+
 
 # requestIdleCallback
