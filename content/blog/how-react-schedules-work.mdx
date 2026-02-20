@@ -10,8 +10,6 @@ draft: true
 I'm sure most of the react developers have gone through this once, updating the state and trying to `console.log` it in the next 
 line and wondering for a hour why my state isn't changing. 
 
-React is easy to get started with but also soon we crash into a weird bugs that makes us wonder 
-_what the hell is even going on_ and it's often time what we think of how it works vs how it is actually working.
 
 Let's start with a few examples and we will dig deeper
 <Sandpack
@@ -135,49 +133,107 @@ Try clicking the first `increment` button and check the console tab, you will se
     setState(stale + 1);
   };
 ```
-Click the second `increment` button
+Click the second `increment` button, you would except it to increment 3 times but it only increment once, 
+_Hmm, that seems odd again_
 
-if you wanna understand why react fiber exist, i have already wrote a blog for same _understanding why react fiber exists_
+```jsx 
+ const handleSetWithUpdater = () => {
+    setUpdated(prev => prev + 1);
+    setUpdated(prev => prev + 1);
+    setUpdated(prev => prev + 1);
+  };
+
+```
+
+now click the 3rd `increment` button well now it does increment three times, _what is going on here?_
+
+React is easy to get started with but also soon we crash into a weird issues like these that makes us wonder 
+_what the hell is even going on_ and it's often time what we think of how it works vs how it is actually working.
+
+if you already have answer to these all than we will dig deeper into how it's working internally, 
+but if you don't know it's fine we will understand this anyway.
+
+<IntendedAudience>
+This blog is for developers who already know React basics and want to understand how React works internally. You should be comfortable with JavaScript concepts like the call stack, event loop and task queues.
+</IntendedAudience>
+
+# Recursive Rendering
+
+React 16 introduced the new reconciliation algorithm, old reconciliation algorithm used to render everything 
+recursivly meaning once the rendering process starts there is no way for us to stop it unless it finish the work,
+itself now that lead some issues.
+
+<img src="/blog/scheduler/angry.svg" alt="React UI Runtime" width="400" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+
+say your browser is working on `60fps`, which is 60 frames per seconds, 1 frame in `16.6ms`. your browser 
+has to render `1` frame in `16ms`. during this one rendering process it needs to reflow, repaint etc
+if your javascript itself takes more than `16ms` or `16ms` it is not giving time for browser to do the work it would drop the 
+frame what would lead to janky UI.
+
+I have already written a blog you can check that out, [understanding why react fiber exists](https://inside-react.vercel.app/blog/understanding-why-react-fiber-exists)
 
 
-in this blog we will dive deep into a react scheduler package and how it allows react to cause mid rendering perform a higher
-priority task and resume from where it left off. 
 
-# I'm fast as fk boi
+# New Reconciliation algorithm
 
 <img src="/blog/scheduler/zoro.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-well we can't directly pause javascript execution or we can't just windoff the callstack and pickup something and process 
-cause it's not fundamentally available in javascript, so with this new reconciliation algorithm react breaks 
+so with this new reconciliation algorithm react breaks 
 the rendering process into a small unit of work, rather doing all rendering process once we perform a rendering 
-in a small unit of work
+in a small unit of work in a time slice
 
 <img src="/blog/scheduler/wait.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
 
-it's a simple concept if we have a can't 
-
+It's a simple concept, our rendering is divided into a small unit of work instead of doing everything at once 
+we do a small chunk of works in a time slice(~5ms) and let the browser do it's work as well.
 
 so here the `5ms` is not a hard rule but some heuristic value, your browser needs to repaint and go through its own process 
-but if js thread is takes more than `16ms` it will drop the frame and again it's a janky UI (explain this more)
+so for the safer side to prevent a frame drop and janky UI it takes the frame interval of `5ms`
 
-# Giving Control Back to Browser
-When we say giving control back to a browser it isn't we are waiting for js to complete and we will use that computation 
-power to do the `repaint` and `reflow`
+# State update is not synchronous
+```jsx 
+  const handleClick = () => {
+    const isHuman = true
+    if(isHuman){
+      console.log("Hello Human 👋");
+    }else{
+      console.log("😲😲");
+    }
+    setCount(count + 1);
+    console.log(count)
+  }
+  <button onClick={handleClick}>click me</button>
 
-JavaScript is a single threaded not the browser, it would cause an race condition, inconsistent layout 
-if two thread tried to do same thing  just imagine browser doing the calculations of your div and components and in 
-the middle of it, your js program does
-
-``` js  
-div.style.width = "500px"
 ```
 
-so browser just waits for js to finish it's work so that it's like _ah ok that's final thing then 
-i will do my work now_
+<LineExecutionDemo
+  title="handleClick() Execution"
+  speed={600}
+  lang="jsx"
+  startAt={0}
+  stopAt={7}
+  console={[
+    { line: 3, text: 'Hello Human 👋' },
+  ]}
+  code={`const handleClick = () => {
+  const isHuman = true
+  if(isHuman){
+    console.log("Hello Human 👋");
+  }else{
+    console.log("😲😲");
+  }
+  setCount(count + 1); // ⏳ schedules update
+  console.log(count)   // still 0!
+}`}
+/>
 
-when you do the setState react will not start the rendering process immediately it will first dispatchtheupdate, 
-it will create a update object which basically preparing for the update, this update object contains 
-the lane information, egarState etc 
+When you click a button function execution starts, it begins to run synchronously, the moment 
+you come to 
+
+```jsx 
+setCount(prev+1)
+```
+it doesn't immediately start the rendering process rather 
 
 
 react creates an update object first enqueue that updateObject, it will now go all the way up to the 
