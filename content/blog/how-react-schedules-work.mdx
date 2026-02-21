@@ -154,43 +154,78 @@ if you already have answer to these all than we will dig deeper into how it's wo
 but if you don't know it's fine we will understand this anyway.
 
 <IntendedAudience>
-This blog is for developers who already know React basics and want to understand how React works internally. You should be comfortable with JavaScript concepts like the call stack, event loop and task queues.
+This blog is for developers who already know React basics and want to understand how React works internally. 
+You should be comfortable with JavaScript concepts like the call stack, event loop and task queues and 
+some basics of react fiber and new reconciliation algorithm.
 </IntendedAudience>
 
-# Recursive Rendering
+# Fiber Node 
 
-React 16 introduced the new reconciliation algorithm, old reconciliation algorithm used to render everything 
-recursivly meaning once the rendering process starts there is no way for us to stop it unless it finish the work,
-itself now that lead some issues.
-
-<img src="/blog/scheduler/angry.svg" alt="React UI Runtime" width="400" height="100" style={{ display: 'block', margin: '2rem auto' }} />
-
-say your browser is working on `60fps`, which is 60 frames per seconds, 1 frame in `16.6ms`. your browser 
-has to render `1` frame in `16ms`. during this one rendering process it needs to reflow, repaint etc
-if your javascript itself takes more than `16ms` or `16ms` it is not giving time for browser to do the work it would drop the 
-frame what would lead to janky UI.
-
-I have already written a blog you can check that out, [understanding why react fiber exists](https://inside-react.vercel.app/blog/understanding-why-react-fiber-exists)
+React reads your jsx components and creates this in-memory UI tree called `Fiber`. This fiber 
+tree is made of different `FiberNode`
 
 
+```tsx
+function FiberNode(
+  this: $FlowFixMe,
+  tag: WorkTag,        
+  pendingProps: mixed, 
+  key: ReactKey,       
+  mode: TypeOfMode,    
+) {
+  ...
+  // Tree structure
+  this.return = null;   // Parent fiber
+  this.child = null;    // First child fiber
+  this.sibling = null;  // Next sibling fiber
+  ...
+  // State
+  this.memoizedState = null; // (hooks for function components)
+  ...
+}
+```
 
-# New Reconciliation algorithm
+<img src="/blog/fiber/fiber.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+Each fiber represents one piece of your UI. A component. A div. A button. Whatever. See those three properties in `FiberNode`? child, sibling, return. These are pointers. They connect fibers to other fibers, forming like a linked list.
 
-<img src="/blog/scheduler/zoro.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+And here's why this matters: React owns this data structure. It's just an object sitting in memory. React can walk it however it wants, stop whenever it wants, and resume whenever it wants.
 
-so with this new reconciliation algorithm react breaks 
-the rendering process into a small unit of work, rather doing all rendering process once we perform a rendering 
-in a small unit of work in a time slice
+I have another blog if you want to read, [understanding why react fiber exists](https://inside-react.vercel.app/blog/understanding-why-react-fiber-exists)
 
-<img src="/blog/scheduler/wait.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+- [FiberNode](https://github.com/facebook/react/blob/main/packages/react-reconciler/src/ReactFiber.js#L138-L211)
 
-It's a simple concept, our rendering is divided into a small unit of work instead of doing everything at once 
-we do a small chunk of works in a time slice(~5ms) and let the browser do it's work as well.
+# memoizedState
 
-so here the `5ms` is not a hard rule but some heuristic value, your browser needs to repaint and go through its own process 
-so for the safer side to prevent a frame drop and janky UI it takes the frame interval of `5ms`
+memoizedState is the property in the `FiberNode` which hold all information about your hooks.
+
+say you have a simple `App` component 
+
+```tsx 
+function App(){
+  const [count, setCount] = useState(0);
+  const [greet, setGreet] = useState("hello");
+
+  const ref = useRef();
+  return <>...</>
+}
+```
+Now this your App component has a `FiberNode` internally and inside the `memoizedState` all your hooks 
+information is stored as a linkedinlist.
+
+<img src="/blog/scheduler/hook.svg" alt="React UI Runtime" width="800" height="100" style={{ display: 'block', margin: '2rem auto' }} />
+
+we only had 2 hooks in our App component that's the reason you see `next: null` on the last hook
+<details>
+  <summary>`queue`</summary>
+   <img src="/blog/scheduler/queue.png" alt="React UI Runtime" width="400" height="100"/> 
+</details>
+
+> These are some prior knowledge I wanted to discuss before we actually dig in.
 
 # State update is not synchronous
+
+I hope you are ready to dive into react internals now, let's start with an example
+
 ```jsx 
   const handleClick = () => {
     const isHuman = true
@@ -207,13 +242,15 @@ so for the safer side to prevent a frame drop and janky UI it takes the frame in
 ```
 
 <LineExecutionDemo
-  title="handleClick() Execution"
+  title="handleClick()"
   speed={600}
   lang="jsx"
   startAt={0}
   stopAt={7}
+  skip={[4, 5]}
   console={[
     { line: 3, text: 'Hello Human 👋' },
+    { line: 8, text: '0', type: 'log' },
   ]}
   code={`const handleClick = () => {
   const isHuman = true
@@ -223,18 +260,21 @@ so for the safer side to prevent a frame drop and janky UI it takes the frame in
     console.log("😲😲");
   }
   setCount(count + 1); // ⏳ schedules update
-  console.log(count)   // still 0!
+  console.log(count)  
 }`}
 />
 
-When you click a button function execution starts, it begins to run synchronously, the moment 
-you come to 
+When you click a button `handleClick` execution starts, it begins to run synchronously, the moment 
+you come
 
 ```jsx 
 setCount(prev+1)
 ```
-it doesn't immediately start the rendering process rather 
+it doesn't immediately start the rendering process, it first schedules an update and for that it calls 
+`dispatchSetState` internally
 
+
+# dispatchSetState
 
 react creates an update object first enqueue that updateObject, it will now go all the way up to the 
 root fiber and mark everything as a needing update (childrenLane)

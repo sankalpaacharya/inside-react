@@ -31,6 +31,8 @@ interface LineExecutionClientProps {
   console?: ConsoleEntry[];
   startAt?: number;
   stopAt?: number;
+  /** 0-based line indices to skip during execution */
+  skip?: number[];
 }
 
 const LOG_COLOR_MAP: Record<string, string> = {
@@ -48,8 +50,10 @@ export function LineExecutionClient({
   console: consoleLogs = [],
   startAt = 0,
   stopAt,
+  skip = [],
 }: LineExecutionClientProps) {
   const effectiveStop = stopAt ?? lines.length - 1;
+  const skipSet = new Set(skip);
   const [activeLine, setActiveLine] = useState(-1);
   const [isPlaying, setIsPlaying] = useState(false);
   const [executedLines, setExecutedLines] = useState<Set<number>>(new Set());
@@ -70,7 +74,12 @@ export function LineExecutionClient({
     }
 
     const timeout = setTimeout(() => {
-      const next = activeLine === -1 ? startAt : activeLine + 1;
+      let next = activeLine === -1 ? startAt : activeLine + 1;
+      while (skipSet.has(next) && next <= effectiveStop) next++;
+      if (next > effectiveStop) {
+        setIsPlaying(false);
+        return;
+      }
       setActiveLine(next);
       setExecutedLines((s) => new Set(s).add(next));
 
@@ -133,7 +142,8 @@ export function LineExecutionClient({
         {lines.map((tokens, i) => {
           const isActive = i === activeLine;
           const isExecuted = executedLines.has(i) && !isActive;
-          const isOutOfRange = i < startAt || i > effectiveStop;
+          const isSkipped = skipSet.has(i);
+          const isOutOfRange = i < startAt || i > effectiveStop || isSkipped;
           const isPending =
             activeLine >= 0 && !isExecuted && !isActive && !isOutOfRange;
 

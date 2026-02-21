@@ -21,6 +21,8 @@ interface LineExecutionDemoProps {
   startAt?: number;
   /** 0-based line index to stop execution at, inclusive (default: last line) */
   stopAt?: number;
+  /** 0-based line indices to skip during execution */
+  skip?: number[];
 }
 
 /**
@@ -35,6 +37,7 @@ export async function LineExecutionDemo({
   console: consoleLogs = [],
   startAt,
   stopAt,
+  skip = [],
 }: LineExecutionDemoProps) {
   const highlighted = await highlight(
     { value: code.trim(), lang, meta: "" },
@@ -81,6 +84,7 @@ export async function LineExecutionDemo({
       console={consoleLogs}
       startAt={startAt}
       stopAt={stopAt}
+      skip={skip}
     />
   );
 }
